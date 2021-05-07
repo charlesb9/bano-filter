@@ -1,0 +1,25 @@
+{
+  "name": "bano-rewrite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodejs": "^0.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/chb9/bano-rewrite.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/chb9/bano-rewrite/issues"
+  },
+  "homepage": "https://gitlab.com/chb9/bano-rewrite#readme"
+}
