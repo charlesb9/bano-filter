@@ -5,7 +5,7 @@ const app = express();
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
     next();
 
   });
@@ -15,8 +15,7 @@ app.use('/api/ban/:filter/', (req, res, next) => {
   let query = req.query.q
   let arg = query.split(' ').join('+')
   let filter = req.params.filter
-  
-  new Promise((resolve, reject) => {
+  new Promise((resolve) => {
       
       const http = require('http');    
       http.get(`http://api-adresse.data.gouv.fr/search/?q=${filter}+${arg}`, (res) => {
