@@ -1,5 +1,42 @@
 const http = require('http');
-const app = require('./app');
+const express = require('express');
+const app = express();
+
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    next();
+
+  });
+
+app.use('/api/ban/:filter/', (req, res, next) => {
+
+  let query = req.query.q
+  let arg = query.split(' ').join('+')
+  let filter = req.params.filter
+  
+  new Promise((resolve, reject) => {
+      
+      const http = require('http');    
+      http.get(`http://api-adresse.data.gouv.fr/search/?q=${filter}+${arg}`, (res) => {
+      
+          res.setEncoding('utf8');
+          let data = ''
+          res.on('data', (chunk) => { data += chunk; });
+          res.on('end', () => {
+              resolve(data)
+          })
+  
+      })   
+  })  .then(response => {
+              res.status(200).json(response)
+          })
+      .catch(error => {
+              res.status(404).json({error: error})
+          });
+  
+  });
 
 const normalizePort = val => {
     const port = parseInt(val, 10);
@@ -17,29 +54,8 @@ const port = normalizePort(process.env.PORT || '3000');
 
 app.set('port', port);
 
-const errorHandler = error => {
-    if (error.syscall !== 'listen') {
-        throw error;
-    }
-    const address = server.address();
-    const bind = typeof address === 'string' ? 'pipe ' + address : 'port: ' + port;
-    switch (error.code) {
-    case 'EACCES':
-        console.error(bind + ' requires elevated privileges.');
-        process.exit(1);
-        break;
-    case 'EADDRINUSE':
-        console.error(bind + ' is already in use.');
-        process.exit(1);
-        break;
-    default:
-        throw error;
-    }
-};
-
 const server = http.createServer(app);
 
-server.on('error', errorHandler);
 server.on('listening', () => {
     const address = server.address();
     const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
